@@ -17,6 +17,14 @@ public class UsuarioController {
 	
 	@Autowired
 	private UsuarioRepository usuarioRepository;
+	
+	@GetMapping("/{id}/relatoriopdf")
+	public ResponseEntity<Usuario> relatorio(@PathVariable("id") Long id) {
+		
+		//Retorno seria um relatório...
+		Usuario usuario = usuarioRepository.findById(id).get();
+		return new ResponseEntity<Usuario>(usuario, HttpStatus.OK);
+	}
 
 	@GetMapping("/{id}")
 	public ResponseEntity<Usuario> init(@PathVariable("id") Long id) {
