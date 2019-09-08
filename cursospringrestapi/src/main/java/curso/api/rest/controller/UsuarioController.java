@@ -3,6 +3,7 @@ package curso.api.rest.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 import curso.api.rest.model.Usuario;
 import curso.api.rest.repository.UsuarioRepository;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
@@ -49,12 +51,18 @@ public class UsuarioController {
 	
 	@PostMapping("/")
 	public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario){
+		
+		usuario.getTelefones().forEach(t -> t.setUsuario(usuario));
+		
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
 		return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
 	}
 	
 	@PutMapping("/")
 	public ResponseEntity<Usuario> atualizar(@RequestBody Usuario usuario){
+		
+		usuario.getTelefones().forEach(t -> t.setUsuario(usuario));
+		
 		Usuario usuarioAtualizado = usuarioRepository.save(usuario);
 		return new ResponseEntity<Usuario>(usuarioAtualizado, HttpStatus.OK);
 	}
