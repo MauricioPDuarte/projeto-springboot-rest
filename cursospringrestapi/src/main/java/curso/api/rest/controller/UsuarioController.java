@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 import curso.api.rest.model.Usuario;
 import curso.api.rest.repository.UsuarioRepository;
 
-@CrossOrigin
 @RestController
 @RequestMapping("/usuario")
 public class UsuarioController {
