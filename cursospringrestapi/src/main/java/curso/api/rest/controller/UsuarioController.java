@@ -3,6 +3,7 @@ package curso.api.rest.controller;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -51,6 +52,7 @@ public class UsuarioController {
 	public ResponseEntity<Usuario> salvar(@RequestBody Usuario usuario){
 		
 		usuario.getTelefones().forEach(t -> t.setUsuario(usuario));
+		usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
 		
 		Usuario usuarioSalvo = usuarioRepository.save(usuario);
 		return new ResponseEntity<Usuario>(usuarioSalvo, HttpStatus.OK);
@@ -60,6 +62,12 @@ public class UsuarioController {
 	public ResponseEntity<Usuario> atualizar(@RequestBody Usuario usuario){
 		
 		usuario.getTelefones().forEach(t -> t.setUsuario(usuario));
+		
+		Usuario usuarioTemp = usuarioRepository.findUserByLogin(usuario.getLogin());
+		
+		if(!usuario.getSenha().equals(usuarioTemp.getSenha())) {
+			usuario.setSenha(new BCryptPasswordEncoder().encode(usuario.getSenha()));
+		}
 		
 		Usuario usuarioAtualizado = usuarioRepository.save(usuario);
 		return new ResponseEntity<Usuario>(usuarioAtualizado, HttpStatus.OK);
